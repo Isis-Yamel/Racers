@@ -1,5 +1,14 @@
 # Welcome to the One and only UdaciRacer Simulation Game
 
+## Student intro and instructions
+
+The main approach in this project is to practice async js and I make use of:
+
+* fetch
+* async / await
+* try / catch
+
+To start the project follow the instructions below.
 ## Project Introduction
 
 Here is a partially built-out game that races cars—your job is to complete it! Throughout the game logic, you will find _"TODO"_ comments that must be completed in order for the game to work. You are going to use the asynchronous skills you gained in the course to fill in the blanks in this game.
