@@ -1,7 +1,7 @@
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
 // The store will hold all information needed globally
-var store = {
+let store = {
 	track_id: undefined,
 	player_id: undefined,
 	race_id: undefined,
@@ -80,10 +80,8 @@ async function handleCreateRace() {
 
 	renderAt('#race', renderRaceStartView(track))
 
-	// TODO - Get player_id and track_id from the store
 	const { track_id, player_id } = store;
 
-	// const race = TODO - invoke the API call to create the race, then save the result
 	const race = await createRace(track_id, player_id)
 		.then(race => {
 			store.race_id = race.ID;
@@ -101,22 +99,18 @@ function runRace(raceID) {
 				getRace(raceID)
 					.then((response) => {
 						 if (response.status === "in-progress") {
-							 //TODO - if the race info status property is "in-progress", update the leader board by calling:
 							 renderAt('#leaderBoard', raceProgress(response.positions))
 						} else if (response.status === "finished") {
-							 //TODO - if the race info status property is "finished", run the following:
 							 clearInterval(raceInterval) // to stop the interval from repeating
 							 renderAt('#race', resultsView(response.positions)) // to render the results view
 							 resolve(response) // resolve the promise
 						 }
 					})
 			}
-			// TODO - use Javascript's built in setInterval method to get race info every 500ms
 			//source: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
 			const raceInterval = setInterval(() => getRaceInfo(), 500, raceID)
 		})
 	} catch (error) {
-		// remember to add error handling for the Promise
 		alert("We can not retrieve race info, sorry:", error)
 	}
 }
@@ -128,15 +122,12 @@ async function runCountdown() {
 		let timer = 3
 
 		return new Promise(resolve => {
-			// TODO - use Javascript's built in setInterval method to count down once per second
 			const countInterval = setInterval(() => count(), 1000)
 
 			const count = () => {
 				if (timer > 0) {
-					// run this DOM manipulation to decrement the countdown for the user
 					document.getElementById('big-numbers').innerHTML = --timer
 				} else if (timer === 0) {
-					// TODO - if the countdown is done, clear the interval, resolve the promise, and return
 					clearInterval(countInterval);
 					resolve();
 				}
@@ -153,14 +144,10 @@ function handleSelectPodRacer(target) {
 	try {
 		const selected = document.querySelector('#racers .selected')
 		if(selected) {
-			// remove class selected from all racer options
 			selected.classList.remove('selected')
 		}
 
-		// add class selected to current target
 		target.classList.add('selected')
-
-		// TODO - save the selected racer to the store
 		store.player_id = parseInt(target.id);
 
 	} catch (error) {
@@ -174,14 +161,10 @@ function handleSelectTrack(target) {
 	try {
 		const selected = document.querySelector('#tracks .selected')
 		if(selected) {
-			// remove class selected from all track options
 			selected.classList.remove('selected')
 		}
 
-		// add class selected to current target
 		target.classList.add('selected')
-
-		// TODO - save the selected track id to the store
 		store.track_id = parseInt(target.id);
 
 	} catch (error) {
@@ -191,7 +174,6 @@ function handleSelectTrack(target) {
 
 function handleAccelerate() {
 	console.log("accelerate button clicked")
-	// TODO - Invoke the API call to accelerate
 	try {
 		accelerate(store.race_id);
 	} catch (error) {
@@ -299,7 +281,7 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-	let userPlayer = positions.find(e => e.id === store.player_id)
+	const userPlayer = positions.find(e => e.id === store.player_id)
 	userPlayer.driver_name += " (you)"
 
 	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
@@ -347,8 +329,6 @@ function defaultFetchOpts() {
 		},
 	}
 }
-
-// TODO - Make a fetch call (with error handling!) to each of the following API endpoints
 
 function getTracks() {
 	return fetch(`${SERVER}/api/tracks`)
